@@ -5,19 +5,29 @@
   ],
   "products" : [
     {
-      "displayPrice" : "14.99",
+      "displayPrice" : "24.99",
       "familyShareable" : true,
       "internalID" : "MD_LIFE_001",
       "localizations" : [
         {
-          "description" : "Pay once, own forever. Unlimited auto-detected drives, swipe classifications, IRS Schedule C PDF logbooks & CSV exports.",
+          "description" : "Pay once, own forever. Unlimited auto-detected drives, swipe classifications, audit-ready tax PDF logbooks & CSV exports.",
           "displayName" : "MileDeck Pro Lifetime",
           "locale" : "en_US"
         },
         {
-          "description" : "一次买断终身拥有：无限自动里程记录、左滑右滑分类、IRS 报税 PDF 日志与 CSV 导出。",
+          "description" : "一次买断终身拥有：无限自动里程记录、左滑右滑分类、报税审计级 PDF 日志与 CSV 导出。",
           "displayName" : "MileDeck 永久买断版",
           "locale" : "zh_CN"
+        },
+        {
+          "description" : "一次買斷終身擁有：無限自動行車紀錄、滑卡分類、里程報稅 PDF 總帳與 CSV 匯出。",
+          "displayName" : "MileDeck 永久買斷版",
+          "locale" : "zh_HK"
+        },
+        {
+          "description" : "一次買斷終身擁有：無限自動行車紀錄、滑卡分類、里程報稅 PDF 總帳與 CSV 匯出。",
+          "displayName" : "MileDeck 永久買斷版",
+          "locale" : "zh_TW"
         }
       ],
       "productID" : "com.yanghe.miledeck.pro.lifetime",
@@ -41,7 +51,7 @@
       "localizations" : [
         {
           "customAppName" : "MileDeck",
-          "description" : "Unlimited drive classifications, IRS Schedule C PDF logbooks, CSV exports & multi-vehicle reports.",
+          "description" : "Unlimited drive classifications, audit-ready tax PDF logbooks, CSV exports & multi-vehicle reports.",
           "displayName" : "MileDeck Pro",
           "locale" : "en_US"
         },
@@ -50,6 +60,12 @@
           "description" : "无限商务里程分类、报税 PDF 日志与多车辆 CSV 导出。",
           "displayName" : "MileDeck Pro 会员",
           "locale" : "zh_CN"
+        },
+        {
+          "customAppName" : "MileDeck 里程報稅",
+          "description" : "無限商務里程分類、里程報稅 PDF 總帳與多車輛 CSV 匯出。",
+          "displayName" : "MileDeck Pro 會員",
+          "locale" : "zh_HK"
         }
       ],
       "name" : "MileDeck Pro",
@@ -61,26 +77,36 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "9.99",
+          "displayPrice" : "14.99",
           "familyShareable" : true,
           "groupNumber" : 1,
           "internalID" : "MD_YEAR_001",
           "introductoryOffer" : {
-            "internalID" : "MD_TRIAL_3D",
+            "internalID" : "MD_TRIAL_7D",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
-            "subscriptionPeriod" : "P3D"
+            "subscriptionPeriod" : "P7D"
           },
           "localizations" : [
             {
-              "description" : "3-day free trial, then annual unlimited drive classifications, 2026 IRS PDF logbooks & CSV exports.",
+              "description" : "7-day free trial, then annual unlimited drive classifications, audit-ready tax PDF logbooks & CSV exports.",
               "displayName" : "MileDeck Pro Annual",
               "locale" : "en_US"
             },
             {
-              "description" : "含3天免费试用，全年无限里程分类、2026 IRS 报税 PDF 与 CSV 导出。",
+              "description" : "含 7 天免费试用（第 5 天提醒），全年无限里程分类、报税 PDF 与 CSV 导出。",
               "displayName" : "MileDeck Pro 年度版",
               "locale" : "zh_CN"
+            },
+            {
+              "description" : "含 7 天免費試用（第 5 天提醒），全年無限行車紀錄分類、里程報稅 PDF 與 CSV 匯出。",
+              "displayName" : "MileDeck Pro 年度版",
+              "locale" : "zh_HK"
+            },
+            {
+              "description" : "含 7 天免費試用（第 5 天提醒），全年無限行車紀錄分類、里程報稅 PDF 與 CSV 匯出。",
+              "displayName" : "MileDeck Pro 年度版",
+              "locale" : "zh_TW"
             }
           ],
           "productID" : "com.yanghe.miledeck.pro.yearly",
@@ -96,14 +122,14 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "1.99",
+          "displayPrice" : "4.99",
           "familyShareable" : true,
           "groupNumber" : 2,
           "internalID" : "MD_MONTH_001",
           "introductoryOffer" : null,
           "localizations" : [
             {
-              "description" : "Monthly unlimited drive classifications, IRS Schedule C PDF logbooks & CSV exports.",
+              "description" : "Monthly unlimited drive classifications, audit-ready tax PDF logbooks & CSV exports.",
               "displayName" : "MileDeck Pro Monthly",
               "locale" : "en_US"
             },
@@ -111,6 +137,16 @@
               "description" : "按月解锁无限里程分类、报税 PDF 日志与 CSV 导出。",
               "displayName" : "MileDeck Pro 月度版",
               "locale" : "zh_CN"
+            },
+            {
+              "description" : "按月解鎖無限行車紀錄分類、里程報稅 PDF 總帳與 CSV 匯出。",
+              "displayName" : "MileDeck Pro 月度版",
+              "locale" : "zh_HK"
+            },
+            {
+              "description" : "按月解鎖無限行車紀錄分類、里程報稅 PDF 總帳與 CSV 匯出。",
+              "displayName" : "MileDeck Pro 月度版",
+              "locale" : "zh_TW"
             }
           ],
           "productID" : "com.yanghe.miledeck.pro.monthly",

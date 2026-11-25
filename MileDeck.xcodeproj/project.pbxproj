@@ -12,9 +12,11 @@
 		C1E9864EF70AB25CF18A75B5 /* app_res::PrivacyInfo.xcprivacy */ = {isa = PBXBuildFile; fileRef = 6976E708C17875302669AA99; };
 		C9BF1179CA44F3CC44A48ACB /* app_src::Sources/MileDeckApp.swift */ = {isa = PBXBuildFile; fileRef = 093C83B8EBD900CA025C2755; };
 		8D82DC1A68AB5AF512CCA1D7 /* app_src::Sources/Services/DriveTrackingService.swift */ = {isa = PBXBuildFile; fileRef = 9B2CFEB89C43C78344E48047; };
+		9ED3F0D6194DEE9260294A22 /* app_src::Sources/Services/FunnelMetrics.swift */ = {isa = PBXBuildFile; fileRef = 2C6CA6D2842E0CB2B016B72C; };
 		EFB2443E3A6E1C10BF5D5BA7 /* app_src::Sources/Services/IRSLogbookPDFRenderer.swift */ = {isa = PBXBuildFile; fileRef = 782BCC241BBD11C9F68D2AD1; };
 		10AAF2AFCAFE7038A2DCF77F /* app_src::Sources/Services/IRSRateEngine.swift */ = {isa = PBXBuildFile; fileRef = 093A83B88ED67207A5E23017; };
 		CCC20633591EA6A3071A122D /* app_src::Sources/Services/MileageStore.swift */ = {isa = PBXBuildFile; fileRef = 4C137910EB496104A8928CD2; };
+		AF4E61F6AF73B542E79B8832 /* app_src::Sources/Services/ReviewPromptManager.swift */ = {isa = PBXBuildFile; fileRef = E7609AA628946C5E7DE87947; };
 		CE54438F5203C36342D0E562 /* app_src::Sources/Services/StoreManager.swift */ = {isa = PBXBuildFile; fileRef = FD8CDCC9CFAB79B4B4A119D1; };
 		7248F215468E35E441A2EEAC /* app_src::Sources/Shared/L10n.swift */ = {isa = PBXBuildFile; fileRef = CC5397DF0AAB65BE3BB042CC; };
 		DD19FB3D4878920C6505CD48 /* app_src::Sources/Shared/Models.swift */ = {isa = PBXBuildFile; fileRef = D7AAA67254F24FD39BC2C17C; };
@@ -22,6 +24,7 @@
 		02CE66C3C9B5776219897846 /* app_src::Sources/Views/DriveDeckView.swift */ = {isa = PBXBuildFile; fileRef = 2502A261CEDAC2A7B9D74F1A; };
 		193618BBE4B2DCE10C028B01 /* app_src::Sources/Views/DrivesHomeView.swift */ = {isa = PBXBuildFile; fileRef = C25D39E9713D94EC01C66A0B; };
 		6544A0748EF4DBC169B8615F /* app_src::Sources/Views/MainTabView.swift */ = {isa = PBXBuildFile; fileRef = 7A0DE39FC7BE42E0AA6D59FF; };
+		4795BC860EE5A766E555D1C6 /* app_src::Sources/Views/OnboardingView.swift */ = {isa = PBXBuildFile; fileRef = CB1CE2A61FF560337FC6261C; };
 		4F51247D53DFC666A9210BF6 /* app_src::Sources/Views/PaywallView.swift */ = {isa = PBXBuildFile; fileRef = 6C7718266DD08EDF094763B6; };
 		C278154FB922B7FBDC10536C /* app_src::Sources/Views/ReportsView.swift */ = {isa = PBXBuildFile; fileRef = CF767B5F008540EC52A35635; };
 		A0EC56D608E1CE52B7F7A05C /* app_src::Sources/Views/SettingsView.swift */ = {isa = PBXBuildFile; fileRef = 9903564A67E76C871E2F8766; };
@@ -49,11 +52,14 @@
 		6976E708C17875302669AA99 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "PrivacyInfo.xcprivacy"; path = "Resources/PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
 		025D981006D70A1F52644603 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en"; path = "Resources/en.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		DA35AA6E65F9EE02A6CAA4FE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "Resources/zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		9AFF3AC32E3E7F7B03577392 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "Resources/zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		093C83B8EBD900CA025C2755 /* MileDeckApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MileDeckApp.swift"; path = "Sources/MileDeckApp.swift"; sourceTree = "<group>"; };
 		9B2CFEB89C43C78344E48047 /* DriveTrackingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DriveTrackingService.swift"; path = "Sources/Services/DriveTrackingService.swift"; sourceTree = "<group>"; };
+		2C6CA6D2842E0CB2B016B72C /* FunnelMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FunnelMetrics.swift"; path = "Sources/Services/FunnelMetrics.swift"; sourceTree = "<group>"; };
 		782BCC241BBD11C9F68D2AD1 /* IRSLogbookPDFRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "IRSLogbookPDFRenderer.swift"; path = "Sources/Services/IRSLogbookPDFRenderer.swift"; sourceTree = "<group>"; };
 		093A83B88ED67207A5E23017 /* IRSRateEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "IRSRateEngine.swift"; path = "Sources/Services/IRSRateEngine.swift"; sourceTree = "<group>"; };
 		4C137910EB496104A8928CD2 /* MileageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MileageStore.swift"; path = "Sources/Services/MileageStore.swift"; sourceTree = "<group>"; };
+		E7609AA628946C5E7DE87947 /* ReviewPromptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ReviewPromptManager.swift"; path = "Sources/Services/ReviewPromptManager.swift"; sourceTree = "<group>"; };
 		FD8CDCC9CFAB79B4B4A119D1 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StoreManager.swift"; path = "Sources/Services/StoreManager.swift"; sourceTree = "<group>"; };
 		CC5397DF0AAB65BE3BB042CC /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "L10n.swift"; path = "Sources/Shared/L10n.swift"; sourceTree = "<group>"; };
 		D7AAA67254F24FD39BC2C17C /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Models.swift"; path = "Sources/Shared/Models.swift"; sourceTree = "<group>"; };
@@ -61,6 +67,7 @@
 		2502A261CEDAC2A7B9D74F1A /* DriveDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DriveDeckView.swift"; path = "Sources/Views/DriveDeckView.swift"; sourceTree = "<group>"; };
 		C25D39E9713D94EC01C66A0B /* DrivesHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DrivesHomeView.swift"; path = "Sources/Views/DrivesHomeView.swift"; sourceTree = "<group>"; };
 		7A0DE39FC7BE42E0AA6D59FF /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MainTabView.swift"; path = "Sources/Views/MainTabView.swift"; sourceTree = "<group>"; };
+		CB1CE2A61FF560337FC6261C /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OnboardingView.swift"; path = "Sources/Views/OnboardingView.swift"; sourceTree = "<group>"; };
 		6C7718266DD08EDF094763B6 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PaywallView.swift"; path = "Sources/Views/PaywallView.swift"; sourceTree = "<group>"; };
 		CF767B5F008540EC52A35635 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ReportsView.swift"; path = "Sources/Views/ReportsView.swift"; sourceTree = "<group>"; };
 		9903564A67E76C871E2F8766 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SettingsView.swift"; path = "Sources/Views/SettingsView.swift"; sourceTree = "<group>"; };
@@ -105,9 +112,11 @@
 			children = (
 				093C83B8EBD900CA025C2755,
 				9B2CFEB89C43C78344E48047,
+				2C6CA6D2842E0CB2B016B72C,
 				782BCC241BBD11C9F68D2AD1,
 				093A83B88ED67207A5E23017,
 				4C137910EB496104A8928CD2,
+				E7609AA628946C5E7DE87947,
 				FD8CDCC9CFAB79B4B4A119D1,
 				CC5397DF0AAB65BE3BB042CC,
 				D7AAA67254F24FD39BC2C17C,
@@ -115,6 +124,7 @@
 				2502A261CEDAC2A7B9D74F1A,
 				C25D39E9713D94EC01C66A0B,
 				7A0DE39FC7BE42E0AA6D59FF,
+				CB1CE2A61FF560337FC6261C,
 				6C7718266DD08EDF094763B6,
 				CF767B5F008540EC52A35635,
 				9903564A67E76C871E2F8766,
@@ -214,7 +224,7 @@
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
-			knownRegions = (en, "zh-Hans", Base);
+			knownRegions = (en, "zh-Hans", "zh-Hant", Base);
 			mainGroup = 458947D4DE4B239CC851308F;
 			productRefGroup = 800AD35EAD8C954BA605E340;
 			projectDirPath = "";
@@ -254,9 +264,11 @@
 			files = (
 				C9BF1179CA44F3CC44A48ACB /* Sources/MileDeckApp.swift */,
 				8D82DC1A68AB5AF512CCA1D7 /* Sources/Services/DriveTrackingService.swift */,
+				9ED3F0D6194DEE9260294A22 /* Sources/Services/FunnelMetrics.swift */,
 				EFB2443E3A6E1C10BF5D5BA7 /* Sources/Services/IRSLogbookPDFRenderer.swift */,
 				10AAF2AFCAFE7038A2DCF77F /* Sources/Services/IRSRateEngine.swift */,
 				CCC20633591EA6A3071A122D /* Sources/Services/MileageStore.swift */,
+				AF4E61F6AF73B542E79B8832 /* Sources/Services/ReviewPromptManager.swift */,
 				CE54438F5203C36342D0E562 /* Sources/Services/StoreManager.swift */,
 				7248F215468E35E441A2EEAC /* Sources/Shared/L10n.swift */,
 				DD19FB3D4878920C6505CD48 /* Sources/Shared/Models.swift */,
@@ -264,6 +276,7 @@
 				02CE66C3C9B5776219897846 /* Sources/Views/DriveDeckView.swift */,
 				193618BBE4B2DCE10C028B01 /* Sources/Views/DrivesHomeView.swift */,
 				6544A0748EF4DBC169B8615F /* Sources/Views/MainTabView.swift */,
+				4795BC860EE5A766E555D1C6 /* Sources/Views/OnboardingView.swift */,
 				4F51247D53DFC666A9210BF6 /* Sources/Views/PaywallView.swift */,
 				C278154FB922B7FBDC10536C /* Sources/Views/ReportsView.swift */,
 				A0EC56D608E1CE52B7F7A05C /* Sources/Views/SettingsView.swift */,
@@ -292,6 +305,7 @@
 			children = (
 				025D981006D70A1F52644603 /* en */,
 				DA35AA6E65F9EE02A6CAA4FE /* zh-Hans */,
+				9AFF3AC32E3E7F7B03577392 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -309,8 +323,8 @@
 				DEVELOPMENT_TEAM = KU364788TC;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0.0;
-				CURRENT_PROJECT_VERSION = 1;
+				MARKETING_VERSION = 1.0.1;
+				CURRENT_PROJECT_VERSION = 2;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_VERSION = 5.0;
@@ -334,8 +348,8 @@
 				DEVELOPMENT_TEAM = KU364788TC;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0.0;
-				CURRENT_PROJECT_VERSION = 1;
+				MARKETING_VERSION = 1.0.1;
+				CURRENT_PROJECT_VERSION = 2;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_VERSION = 5.0;

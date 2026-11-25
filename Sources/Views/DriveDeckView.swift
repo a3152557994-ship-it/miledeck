@@ -3,6 +3,7 @@ import SwiftUI
 struct DriveDeckView: View {
     @EnvironmentObject private var ledger: MileageStore
     @EnvironmentObject private var store: StoreManager
+    @EnvironmentObject private var reviewManager: ReviewPromptManager
     @Environment(\.dismiss) private var dismiss
 
     var isModalSheet: Bool = true
@@ -30,8 +31,8 @@ struct DriveDeckView: View {
                             .foregroundStyle(MileTheme.amber)
                         Text(
                             queue.isEmpty
-                                ? L10n.t("All Caught Up!", "全部行程已分类！")
-                                : L10n.t("\(queue.count) Unsorted Drives", "\(queue.count) 趟行程待分类")
+                                ? L10n.t("All Caught Up!", "全部行程已分类！", "全部行車紀錄已分類！")
+                                : L10n.t("\(queue.count) Unsorted Drives", "\(queue.count) 趟行程待分类", "\(queue.count) 趟行車紀錄待分類")
                         )
                         .font(.subheadline.weight(.bold))
                         .foregroundStyle(MileTheme.ink)
@@ -43,7 +44,8 @@ struct DriveDeckView: View {
                         Text(
                             L10n.t(
                                 "+\(IRSRateEngine.formatMoney(ledger.pendingPotentialDeduction, symbol: ledger.settings.currencySymbol)) potential",
-                                "潜在抵税 +\(IRSRateEngine.formatMoney(ledger.pendingPotentialDeduction, symbol: ledger.settings.currencySymbol))"
+                                "潜在抵税 +\(IRSRateEngine.formatMoney(ledger.pendingPotentialDeduction, symbol: ledger.settings.currencySymbol))",
+                                "潛在抵稅 +\(IRSRateEngine.formatMoney(ledger.pendingPotentialDeduction, symbol: ledger.settings.currencySymbol))"
                             )
                         )
                         .font(.caption.weight(.heavy).monospacedDigit())
@@ -60,11 +62,11 @@ struct DriveDeckView: View {
                 // Swipe Instruction Hint
                 if !queue.isEmpty {
                     HStack {
-                        Label(L10n.t("← Swipe Left: Personal", "← 左滑：私人行程"), systemImage: "house.fill")
+                        Label(L10n.t("← Swipe Left: Personal", "← 左滑：私人行程", "← 左滑：私人行程"), systemImage: "house.fill")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(MileTheme.personalSlate)
                         Spacer()
-                        Label(L10n.t("Swipe Right: Business →", "右滑：商务抵税 →"), systemImage: "briefcase.fill")
+                        Label(L10n.t("Swipe Right: Business →", "右滑：商务抵税 →", "右滑：商務抵稅 →"), systemImage: "briefcase.fill")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(MileTheme.emerald)
                     }
@@ -119,7 +121,7 @@ struct DriveDeckView: View {
                             HStack(spacing: 8) {
                                 Image(systemName: "arrow.left.circle.fill")
                                     .font(.title3)
-                                Text(L10n.t("Personal", "私人"))
+                                Text(L10n.t("Personal", "私人", "私人"))
                                     .font(.headline.weight(.bold))
                             }
                             .frame(maxWidth: .infinity)
@@ -154,7 +156,7 @@ struct DriveDeckView: View {
                             performSwipe(.business, drive: drive)
                         } label: {
                             HStack(spacing: 8) {
-                                Text(L10n.t("Business", "商务抵税"))
+                                Text(L10n.t("Business", "商务抵税", "商務抵稅"))
                                     .font(.headline.weight(.bold))
                                 Image(systemName: "arrow.right.circle.fill")
                                     .font(.title3)
@@ -172,7 +174,7 @@ struct DriveDeckView: View {
                 }
             }
             .background(MileTheme.roadWhite.ignoresSafeArea())
-            .navigationTitle(L10n.t("Drive Swipe Deck", "滑动分类行程"))
+            .navigationTitle(L10n.t("Drive Swipe Deck", "滑动分类行程", "滑動分類行車紀錄"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if ledger.lastSwipedSnapshot != nil {
@@ -182,14 +184,14 @@ struct DriveDeckView: View {
                                 ledger.undoLastSwipe()
                             }
                         } label: {
-                            Label(L10n.t("Undo", "撤回"), systemImage: "arrow.uturn.backward")
+                            Label(L10n.t("Undo", "撤回", "復原"), systemImage: "arrow.uturn.backward")
                                 .font(.subheadline.weight(.semibold))
                         }
                     }
                 }
                 if isModalSheet {
                     ToolbarItem(placement: .confirmationAction) {
-                        Button(L10n.t("Done", "完成")) { dismiss() }
+                        Button(L10n.t("Done", "完成", "完成")) { dismiss() }
                             .font(.subheadline.weight(.bold))
                     }
                 }
@@ -198,8 +200,13 @@ struct DriveDeckView: View {
     }
 
     private func swipeCard(for drive: DriveRecord, isTop: Bool) -> some View {
-        let potentialDed = IRSRateEngine.deduction(for: drive, settings: ledger.settings, includePotentialForUnclassified: true)
-        let periodBadge = IRSRateEngine.period(for: drive.startDate).shortBadge
+        let potentialDed = IRSRateEngine.deduction(
+            for: drive,
+            settings: ledger.settings,
+            includePotentialForUnclassified: true,
+            priorDeductibleMilesInYear: ledger.ytdDeductibleMiles
+        )
+        let periodBadge = IRSRateEngine.periodBadge(for: drive.startDate, settings: ledger.settings)
         let activePurpose = (isTop ? selectedPurposeOverride : nil) ?? drive.purpose
         let durationMins = max(1, Int(drive.endDate.timeIntervalSince(drive.startDate) / 60))
 
@@ -214,7 +221,7 @@ struct DriveDeckView: View {
                         Circle()
                             .fill(drive.isAutoDetected ? MileTheme.emeraldBright : MileTheme.amber)
                             .frame(width: 7, height: 7)
-                        Text(drive.isAutoDetected ? L10n.t("AUTO-DETECTED", "自动识别") : L10n.t("LOGGED DRIVE", "手动记录"))
+                        Text(drive.isAutoDetected ? L10n.t("AUTO-DETECTED", "自动识别", "自動偵測") : L10n.t("LOGGED DRIVE", "手动记录", "手動紀錄"))
                             .font(.system(size: 10, weight: .heavy))
                             .tracking(0.6)
                             .foregroundStyle(Color.white.opacity(0.85))
@@ -238,7 +245,7 @@ struct DriveDeckView: View {
                 // Giant Deduction + Distance Metrics
                 HStack(alignment: .firstTextBaseline) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(L10n.t("IRS TAX VALUE", "预计可抵税"))
+                        Text(L10n.t("\(ledger.settings.taxRegion.authorityShort) TAX VALUE", "预计可抵税", "預估抵稅金額"))
                             .font(.system(size: 10, weight: .bold))
                             .tracking(0.5)
                             .foregroundStyle(Color.white.opacity(0.60))
@@ -251,7 +258,7 @@ struct DriveDeckView: View {
                         Text(IRSRateEngine.formatDistance(drive.distanceMiles, unit: ledger.settings.distanceUnit))
                             .font(.system(size: 24, weight: .heavy).monospacedDigit())
                             .foregroundStyle(.white)
-                        Text("\(Self.cardDateFormatter.string(from: drive.startDate)) • \(durationMins) \(L10n.t("min", "分钟"))")
+                        Text("\(Self.cardDateFormatter.string(from: drive.startDate)) • \(durationMins) \(L10n.t("min", "分钟", "分鐘"))")
                             .font(.caption.weight(.medium).monospacedDigit())
                             .foregroundStyle(Color.white.opacity(0.70))
                     }
@@ -262,7 +269,6 @@ struct DriveDeckView: View {
 
             // Crisp White Card Body: Route Timeline + Purpose Tags
             VStack(alignment: .leading, spacing: 14) {
-                // Route A -> B visual timeline
                 HStack(alignment: .top, spacing: 12) {
                     VStack(spacing: 3) {
                         Circle()
@@ -279,7 +285,7 @@ struct DriveDeckView: View {
 
                     VStack(alignment: .leading, spacing: 14) {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(L10n.t("DEPARTED", "出发地"))
+                            Text(L10n.t("DEPARTED", "出发地", "出發地"))
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(MileTheme.muted)
                             Text(drive.startAddress)
@@ -288,7 +294,7 @@ struct DriveDeckView: View {
                                 .lineLimit(2)
                         }
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(L10n.t("ARRIVED", "目的地"))
+                            Text(L10n.t("ARRIVED", "目的地", "目的地"))
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(MileTheme.muted)
                             Text(drive.endAddress)
@@ -303,7 +309,6 @@ struct DriveDeckView: View {
                 .background(MileTheme.roadWhite)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
 
-                // Vehicle + Notes info row
                 HStack(spacing: 8) {
                     Label(ledger.vehicleName(for: drive.vehicleId), systemImage: "car.fill")
                         .font(.caption.weight(.semibold))
@@ -317,9 +322,8 @@ struct DriveDeckView: View {
                     }
                 }
 
-                // Quick Purpose Tag Selector
                 VStack(alignment: .leading, spacing: 7) {
-                    Text(L10n.t("QUICK PURPOSE TAG", "快捷用途标签"))
+                    Text(L10n.t("QUICK PURPOSE TAG", "快捷用途标签", "快速用途標籤"))
                         .font(.system(size: 10, weight: .bold))
                         .tracking(0.5)
                         .foregroundStyle(MileTheme.muted)
@@ -374,7 +378,7 @@ struct DriveDeckView: View {
         .shadow(color: MileTheme.asphalt.opacity(0.10), radius: 14, y: 8)
         .overlay(alignment: .topLeading) {
             if businessOpacity > 0.05 {
-                Text(L10n.t("BUSINESS", "商务抵税"))
+                Text(L10n.t("BUSINESS", "商务抵税", "商務抵稅"))
                     .font(.title3.weight(.black))
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
@@ -389,7 +393,7 @@ struct DriveDeckView: View {
         }
         .overlay(alignment: .topTrailing) {
             if personalOpacity > 0.05 {
-                Text(L10n.t("PERSONAL", "私人行程"))
+                Text(L10n.t("PERSONAL", "私人行程", "私人行程"))
                     .font(.title3.weight(.black))
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
@@ -409,12 +413,13 @@ struct DriveDeckView: View {
             Image(systemName: "checkmark.seal.fill")
                 .font(.system(size: 52))
                 .foregroundStyle(MileTheme.emerald)
-            Text(L10n.t("Deck Cleared!", "全部行程已分类完成！"))
+            Text(L10n.t("Deck Cleared!", "全部行程已分类完成！", "全部行車紀錄已分類完成！"))
                 .font(.title2.weight(.heavy))
                 .foregroundStyle(MileTheme.ink)
             Text(L10n.t(
-                "Your 2026 YTD IRS deduction is now \(IRSRateEngine.formatMoney(ledger.ytdTaxDeduction, symbol: ledger.settings.currencySymbol)) across \(IRSRateEngine.formatDistance(ledger.ytdDeductibleMiles, unit: ledger.settings.distanceUnit)).",
-                "您 2026 年累计可抵税额已更新为 \(IRSRateEngine.formatMoney(ledger.ytdTaxDeduction, symbol: ledger.settings.currencySymbol))。"
+                "Your \(ledger.settings.taxYear) YTD deduction is now \(IRSRateEngine.formatMoney(ledger.ytdTaxDeduction, symbol: ledger.settings.currencySymbol)) across \(IRSRateEngine.formatDistance(ledger.ytdDeductibleMiles, unit: ledger.settings.distanceUnit)).",
+                "您 \(ledger.settings.taxYear) 年累计可抵税额已更新为 \(IRSRateEngine.formatMoney(ledger.ytdTaxDeduction, symbol: ledger.settings.currencySymbol))。",
+                "您 \(ledger.settings.taxYear) 年累計抵稅金額已更新為 \(IRSRateEngine.formatMoney(ledger.ytdTaxDeduction, symbol: ledger.settings.currencySymbol))。"
             ))
             .font(.subheadline)
             .multilineTextAlignment(.center)
@@ -425,7 +430,7 @@ struct DriveDeckView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text(L10n.t("Back to Drives", "返回行程总览"))
+                    Text(L10n.t("Back to Drives", "返回行程总览", "返回行車紀錄"))
                         .font(.headline.weight(.bold))
                         .padding(.horizontal, 28)
                         .padding(.vertical, 13)
@@ -442,7 +447,7 @@ struct DriveDeckView: View {
     }
 
     private func performSwipe(_ classification: DriveClassification, drive: DriveRecord) {
-        if !store.canClassifyOrExportFree {
+        if !store.canClassifyFreeDrive {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                 dragOffset = .zero
             }
@@ -459,6 +464,8 @@ struct DriveDeckView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.21) {
             ledger.classifyDrive(drive.id, as: classification, purpose: chosenPurpose)
             store.recordClassifiedOrExportedDrive()
+            FunnelMetrics.record(.driveClassified)
+            reviewManager.recordClassifiedDrive(totalClassified: store.totalClassifiedDrives)
             dragOffset = .zero
             selectedPurposeOverride = nil
         }
