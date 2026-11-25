@@ -1,0 +1,17 @@
+{
+  "name": "MileDeck — 2026 IRS Auto Mileage & Tax Deduction Tracker ($14.99 Once)",
+  "short_name": "MileDeck",
+  "description": "100% offline automatic GPS mileage tracker for rideshare, delivery, realtors, and 1099 contractors. Built-in 2026 IRS split rates ($0.725 H1 / $0.76 H2), swipe right for business, Schedule C PDF/CSV export, and $14.99 lifetime buyout.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F4F6F8",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

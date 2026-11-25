@@ -1,0 +1,25 @@
+# MileDeck — 2026 IRS Auto Mileage & Tax Deduction Tracker ($14.99 Once)
+
+> MileDeck is a privacy-first, 100% on-device automatic mileage log and tax deduction tracker for iOS. Built as a one-time buyout alternative to $90-$140/yr subscription trackers like MileIQ and Everlance, MileDeck features built-in 2026 IRS split-period rates ($0.725/mi Jan-Jun, $0.76/mi Jul-Dec), tactile swipe classification, and audit-ready Schedule C PDF & CSV logbooks with zero cloud GPS tracking.
+
+## Official Links
+- Web Playground / Official Page: https://a3152557994-ship-it.github.io/miledeck/
+- Apple App Store (iOS / iPadOS / Apple Silicon Mac): https://apps.apple.com/us/app/id6839022103
+- Hong Kong / Taiwan App Store: https://apps.apple.com/hk/app/id6839022103
+- Privacy Policy (100% On-Device, Zero Data Collected): https://a3152557994-ship-it.github.io/miledeck/privacy.html
+- Support: https://a3152557994-ship-it.github.io/miledeck/support.html
+
+## Frequently Asked Questions
+- **Does MileDeck upload my home address or daily GPS routes to cloud servers?** Never. MileDeck runs 100% on-device with zero account creation and zero cloud GPS telemetry. Your trips stay strictly on your iPhone until you export your PDF/CSV tax report.
+- **How does MileDeck handle the 2026 IRS mileage rate split?** MileDeck automatically applies the exact rate based on each drive's date ($0.725/mi H1 and $0.76/mi H2, plus Medical, Charity, or custom mi/km reimbursement rates).
+- **Is there a free tier before buying Lifetime Pro?** Yes — classify up to 20 drives every month completely free, then unlock unlimited drives and CPA exports forever with a single one-time purchase.
+
+## Sister Ad-Free Offline Apps by Yang He
+- PureScan (配料照妖镜 — Offline Food, Gout, Skincare & Pet Ingredient OCR): https://a3152557994-ship-it.github.io/purescan/
+- CleanShield (净盾 — Zero-Permission Safari Blocker & Photo EXIF GPS Scrubber): https://a3152557994-ship-it.github.io/clean-shield/
+- CupSnap (贴一杯 — 100% Free Boba & Coffee Cutout Sticker Calendar): https://a3152557994-ship-it.github.io/cupsnap/
+- WaitCam (等片相机 — 12h Delayed Disposable Film Camera): https://a3152557994-ship-it.github.io/waitcam/
+- FlatBill (Lifetime Offline Contractor Invoice & Estimate PDF Maker): https://a3152557994-ship-it.github.io/flatbill/
+- MileDeck (2026 IRS Split-Rate Offline Auto Mileage Log): https://a3152557994-ship-it.github.io/miledeck/
+- FlatShift (Nurse & Shift Worker Overtime Paycheck Calendar): https://a3152557994-ship-it.github.io/flatshift/
+- OPC Micro-Tools Hub (16 Browser-Local AI & Productivity Utilities): https://a3152557994-ship-it.github.io/opc-tools/
