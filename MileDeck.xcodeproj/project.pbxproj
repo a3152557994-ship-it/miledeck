@@ -1,0 +1,439 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CB6DB9921422E9FCEF1F3EB9 /* app_res::Assets.xcassets */ = {isa = PBXBuildFile; fileRef = CA417F6216B034F54DC87149; };
+		8AE5B9DF7DAEAD457BDCB5EF /* app_res::InfoPlist.strings */ = {isa = PBXBuildFile; fileRef = 67A46C97EC65AD679A659FAE; };
+		C1E9864EF70AB25CF18A75B5 /* app_res::PrivacyInfo.xcprivacy */ = {isa = PBXBuildFile; fileRef = 6976E708C17875302669AA99; };
+		C9BF1179CA44F3CC44A48ACB /* app_src::Sources/MileDeckApp.swift */ = {isa = PBXBuildFile; fileRef = 093C83B8EBD900CA025C2755; };
+		8D82DC1A68AB5AF512CCA1D7 /* app_src::Sources/Services/DriveTrackingService.swift */ = {isa = PBXBuildFile; fileRef = 9B2CFEB89C43C78344E48047; };
+		EFB2443E3A6E1C10BF5D5BA7 /* app_src::Sources/Services/IRSLogbookPDFRenderer.swift */ = {isa = PBXBuildFile; fileRef = 782BCC241BBD11C9F68D2AD1; };
+		10AAF2AFCAFE7038A2DCF77F /* app_src::Sources/Services/IRSRateEngine.swift */ = {isa = PBXBuildFile; fileRef = 093A83B88ED67207A5E23017; };
+		CCC20633591EA6A3071A122D /* app_src::Sources/Services/MileageStore.swift */ = {isa = PBXBuildFile; fileRef = 4C137910EB496104A8928CD2; };
+		CE54438F5203C36342D0E562 /* app_src::Sources/Services/StoreManager.swift */ = {isa = PBXBuildFile; fileRef = FD8CDCC9CFAB79B4B4A119D1; };
+		7248F215468E35E441A2EEAC /* app_src::Sources/Shared/L10n.swift */ = {isa = PBXBuildFile; fileRef = CC5397DF0AAB65BE3BB042CC; };
+		DD19FB3D4878920C6505CD48 /* app_src::Sources/Shared/Models.swift */ = {isa = PBXBuildFile; fileRef = D7AAA67254F24FD39BC2C17C; };
+		15BDB2381D1833218079099E /* app_src::Sources/Shared/Theme.swift */ = {isa = PBXBuildFile; fileRef = A4C14F53AAA187A36D82153C; };
+		02CE66C3C9B5776219897846 /* app_src::Sources/Views/DriveDeckView.swift */ = {isa = PBXBuildFile; fileRef = 2502A261CEDAC2A7B9D74F1A; };
+		193618BBE4B2DCE10C028B01 /* app_src::Sources/Views/DrivesHomeView.swift */ = {isa = PBXBuildFile; fileRef = C25D39E9713D94EC01C66A0B; };
+		6544A0748EF4DBC169B8615F /* app_src::Sources/Views/MainTabView.swift */ = {isa = PBXBuildFile; fileRef = 7A0DE39FC7BE42E0AA6D59FF; };
+		4F51247D53DFC666A9210BF6 /* app_src::Sources/Views/PaywallView.swift */ = {isa = PBXBuildFile; fileRef = 6C7718266DD08EDF094763B6; };
+		C278154FB922B7FBDC10536C /* app_src::Sources/Views/ReportsView.swift */ = {isa = PBXBuildFile; fileRef = CF767B5F008540EC52A35635; };
+		A0EC56D608E1CE52B7F7A05C /* app_src::Sources/Views/SettingsView.swift */ = {isa = PBXBuildFile; fileRef = 9903564A67E76C871E2F8766; };
+		DFBDE4F5FF3AC790C54EE317 /* app_src::Sources/Views/TripEditorSheet.swift */ = {isa = PBXBuildFile; fileRef = 91D4FF96D1CA5101C0E40BB7; };
+		08848171229DF7DB053B4AB2 /* app_src::Sources/Views/VehiclesView.swift */ = {isa = PBXBuildFile; fileRef = 6C1F6CFB20ACDA5DEA95C380; };
+		548008EB0C754A75369933B6 /* test_res::MileDeck.storekit */ = {isa = PBXBuildFile; fileRef = DC38A0BA43ADDE998864C607; };
+		04189B357E18DF114484DD0F /* test_src::Tests/MileDeckTests.swift */ = {isa = PBXBuildFile; fileRef = 388B095089AFB22DFD35E6C3; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		16F2C4CA54673871C223D94E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CAD8338BC75F598B1ADCBE3F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F583221226D2760B45A3A0F6;
+			remoteInfo = MileDeck;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B198A50F2810EC337F6378DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info.plist"; path = "Config/Info.plist"; sourceTree = "<group>"; };
+		2DE97DDB503BE0F716545398 /* MileDeck.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "MileDeck.entitlements"; path = "Config/MileDeck.entitlements"; sourceTree = "<group>"; };
+		DC38A0BA43ADDE998864C607 /* MileDeck.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "MileDeck.storekit"; path = "Config/MileDeck.storekit"; sourceTree = "<group>"; };
+		CA417F6216B034F54DC87149 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Assets.xcassets"; path = "Resources/Assets.xcassets"; sourceTree = "<group>"; };
+		6976E708C17875302669AA99 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "PrivacyInfo.xcprivacy"; path = "Resources/PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
+		025D981006D70A1F52644603 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en"; path = "Resources/en.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		DA35AA6E65F9EE02A6CAA4FE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "Resources/zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		093C83B8EBD900CA025C2755 /* MileDeckApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MileDeckApp.swift"; path = "Sources/MileDeckApp.swift"; sourceTree = "<group>"; };
+		9B2CFEB89C43C78344E48047 /* DriveTrackingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DriveTrackingService.swift"; path = "Sources/Services/DriveTrackingService.swift"; sourceTree = "<group>"; };
+		782BCC241BBD11C9F68D2AD1 /* IRSLogbookPDFRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "IRSLogbookPDFRenderer.swift"; path = "Sources/Services/IRSLogbookPDFRenderer.swift"; sourceTree = "<group>"; };
+		093A83B88ED67207A5E23017 /* IRSRateEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "IRSRateEngine.swift"; path = "Sources/Services/IRSRateEngine.swift"; sourceTree = "<group>"; };
+		4C137910EB496104A8928CD2 /* MileageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MileageStore.swift"; path = "Sources/Services/MileageStore.swift"; sourceTree = "<group>"; };
+		FD8CDCC9CFAB79B4B4A119D1 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StoreManager.swift"; path = "Sources/Services/StoreManager.swift"; sourceTree = "<group>"; };
+		CC5397DF0AAB65BE3BB042CC /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "L10n.swift"; path = "Sources/Shared/L10n.swift"; sourceTree = "<group>"; };
+		D7AAA67254F24FD39BC2C17C /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Models.swift"; path = "Sources/Shared/Models.swift"; sourceTree = "<group>"; };
+		A4C14F53AAA187A36D82153C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Theme.swift"; path = "Sources/Shared/Theme.swift"; sourceTree = "<group>"; };
+		2502A261CEDAC2A7B9D74F1A /* DriveDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DriveDeckView.swift"; path = "Sources/Views/DriveDeckView.swift"; sourceTree = "<group>"; };
+		C25D39E9713D94EC01C66A0B /* DrivesHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DrivesHomeView.swift"; path = "Sources/Views/DrivesHomeView.swift"; sourceTree = "<group>"; };
+		7A0DE39FC7BE42E0AA6D59FF /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MainTabView.swift"; path = "Sources/Views/MainTabView.swift"; sourceTree = "<group>"; };
+		6C7718266DD08EDF094763B6 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PaywallView.swift"; path = "Sources/Views/PaywallView.swift"; sourceTree = "<group>"; };
+		CF767B5F008540EC52A35635 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ReportsView.swift"; path = "Sources/Views/ReportsView.swift"; sourceTree = "<group>"; };
+		9903564A67E76C871E2F8766 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SettingsView.swift"; path = "Sources/Views/SettingsView.swift"; sourceTree = "<group>"; };
+		91D4FF96D1CA5101C0E40BB7 /* TripEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TripEditorSheet.swift"; path = "Sources/Views/TripEditorSheet.swift"; sourceTree = "<group>"; };
+		6C1F6CFB20ACDA5DEA95C380 /* VehiclesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VehiclesView.swift"; path = "Sources/Views/VehiclesView.swift"; sourceTree = "<group>"; };
+		388B095089AFB22DFD35E6C3 /* MileDeckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MileDeckTests.swift"; path = "Tests/MileDeckTests.swift"; sourceTree = "<group>"; };
+		6975357A7649511BA58F1900 /* MileDeck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MileDeck.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DDFD7A10605304A4D4CE43C /* MileDeckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MileDeckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E3169D4F63DB1E51358914FC /* Frameworks (MileDeck) */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93B250D9DF91DE415448B0C3 /* Frameworks (MileDeckTests) */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		458947D4DE4B239CC851308F = {
+			isa = PBXGroup;
+			children = (
+				0B02E85750CBEB48333F67BF /* Sources */,
+				3F953235CC643170F7CD90E8 /* Tests */,
+				56F2342F187A3B7AE05432DB /* Resources */,
+				A8E5606B77D6D322051C976C /* Config */,
+				800AD35EAD8C954BA605E340 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0B02E85750CBEB48333F67BF /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				093C83B8EBD900CA025C2755,
+				9B2CFEB89C43C78344E48047,
+				782BCC241BBD11C9F68D2AD1,
+				093A83B88ED67207A5E23017,
+				4C137910EB496104A8928CD2,
+				FD8CDCC9CFAB79B4B4A119D1,
+				CC5397DF0AAB65BE3BB042CC,
+				D7AAA67254F24FD39BC2C17C,
+				A4C14F53AAA187A36D82153C,
+				2502A261CEDAC2A7B9D74F1A,
+				C25D39E9713D94EC01C66A0B,
+				7A0DE39FC7BE42E0AA6D59FF,
+				6C7718266DD08EDF094763B6,
+				CF767B5F008540EC52A35635,
+				9903564A67E76C871E2F8766,
+				91D4FF96D1CA5101C0E40BB7,
+				6C1F6CFB20ACDA5DEA95C380,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		3F953235CC643170F7CD90E8 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				388B095089AFB22DFD35E6C3,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		56F2342F187A3B7AE05432DB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CA417F6216B034F54DC87149,
+				6976E708C17875302669AA99,
+				67A46C97EC65AD679A659FAE,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		A8E5606B77D6D322051C976C /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				B198A50F2810EC337F6378DF,
+				2DE97DDB503BE0F716545398,
+				DC38A0BA43ADDE998864C607,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
+		800AD35EAD8C954BA605E340 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6975357A7649511BA58F1900,
+				6DDFD7A10605304A4D4CE43C,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F583221226D2760B45A3A0F6 /* MileDeck */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FBB18CE9D0B988EC69D99B7D;
+			buildPhases = (
+				E599964805BEB604F784B7FA /* Sources */,
+				E3169D4F63DB1E51358914FC /* Frameworks */,
+				E644E6601741023783622369 /* Resources */,
+			);
+			buildRules = ();
+			dependencies = ();
+			name = MileDeck;
+			productName = MileDeck;
+			productReference = 6975357A7649511BA58F1900;
+			productType = "com.apple.product-type.application";
+		};
+		7948CA61F9627A87CDEF3152 /* MileDeckTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF0D31FF3B7C340DEADEC713;
+			buildPhases = (
+				EE6B7E10E729CD51192BB5D7 /* Sources */,
+				93B250D9DF91DE415448B0C3 /* Frameworks */,
+				95DE7C5BDB396A6601727506 /* Resources */,
+			);
+			buildRules = ();
+			dependencies = (
+				05F8E64A559435639679B2ED /* PBXTargetDependency */,
+			);
+			name = MileDeckTests;
+			productName = MileDeckTests;
+			productReference = 6DDFD7A10605304A4D4CE43C;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CAD8338BC75F598B1ADCBE3F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2720;
+				LastUpgradeCheck = 2720;
+				TargetAttributes = {
+					F583221226D2760B45A3A0F6 = { DevelopmentTeam = KU364788TC; ProvisioningStyle = Automatic; };
+					7948CA61F9627A87CDEF3152 = { DevelopmentTeam = KU364788TC; TestTargetID = F583221226D2760B45A3A0F6; };
+				};
+			};
+			buildConfigurationList = B67BB7BEADDE62B4C046E4C2;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, "zh-Hans", Base);
+			mainGroup = 458947D4DE4B239CC851308F;
+			productRefGroup = 800AD35EAD8C954BA605E340;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F583221226D2760B45A3A0F6 /* MileDeck */,
+				7948CA61F9627A87CDEF3152 /* MileDeckTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E644E6601741023783622369 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB6DB9921422E9FCEF1F3EB9 /* app_res::Assets.xcassets */,
+				C1E9864EF70AB25CF18A75B5 /* app_res::PrivacyInfo.xcprivacy */,
+				8AE5B9DF7DAEAD457BDCB5EF /* app_res::InfoPlist.strings */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95DE7C5BDB396A6601727506 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				548008EB0C754A75369933B6 /* test_res::MileDeck.storekit */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E599964805BEB604F784B7FA = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9BF1179CA44F3CC44A48ACB /* Sources/MileDeckApp.swift */,
+				8D82DC1A68AB5AF512CCA1D7 /* Sources/Services/DriveTrackingService.swift */,
+				EFB2443E3A6E1C10BF5D5BA7 /* Sources/Services/IRSLogbookPDFRenderer.swift */,
+				10AAF2AFCAFE7038A2DCF77F /* Sources/Services/IRSRateEngine.swift */,
+				CCC20633591EA6A3071A122D /* Sources/Services/MileageStore.swift */,
+				CE54438F5203C36342D0E562 /* Sources/Services/StoreManager.swift */,
+				7248F215468E35E441A2EEAC /* Sources/Shared/L10n.swift */,
+				DD19FB3D4878920C6505CD48 /* Sources/Shared/Models.swift */,
+				15BDB2381D1833218079099E /* Sources/Shared/Theme.swift */,
+				02CE66C3C9B5776219897846 /* Sources/Views/DriveDeckView.swift */,
+				193618BBE4B2DCE10C028B01 /* Sources/Views/DrivesHomeView.swift */,
+				6544A0748EF4DBC169B8615F /* Sources/Views/MainTabView.swift */,
+				4F51247D53DFC666A9210BF6 /* Sources/Views/PaywallView.swift */,
+				C278154FB922B7FBDC10536C /* Sources/Views/ReportsView.swift */,
+				A0EC56D608E1CE52B7F7A05C /* Sources/Views/SettingsView.swift */,
+				DFBDE4F5FF3AC790C54EE317 /* Sources/Views/TripEditorSheet.swift */,
+				08848171229DF7DB053B4AB2 /* Sources/Views/VehiclesView.swift */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE6B7E10E729CD51192BB5D7 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04189B357E18DF114484DD0F /* Tests/MileDeckTests.swift */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		05F8E64A559435639679B2ED = {isa = PBXTargetDependency; target = F583221226D2760B45A3A0F6; targetProxy = 16F2C4CA54673871C223D94E; };
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		67A46C97EC65AD679A659FAE /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				025D981006D70A1F52644603 /* en */,
+				DA35AA6E65F9EE02A6CAA4FE /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F6C536317593A739CBC55CE0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KU364788TC;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 1;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG";
+			};
+			name = Debug;
+		};
+		1175532C20D633A8D148806F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KU364788TC;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 1;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		55C5B61C4157133D2FD5C0AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Config/MileDeck.entitlements";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Config/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanghe.miledeck;
+				PRODUCT_NAME = MileDeck;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+			};
+			name = Debug;
+		};
+		903C068DCB91A63E44F6E6B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Config/MileDeck.entitlements";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Config/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanghe.miledeck;
+				PRODUCT_NAME = MileDeck;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				PROVISIONING_PROFILE_SPECIFIER = "MileDeck AppStore Dist";
+			};
+			name = Release;
+		};
+		1142B2D26B8DF17217F19407 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanghe.miledeck.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MileDeck.app/MileDeck";
+			};
+			name = Debug;
+		};
+		F488FCA490B832B86D14D6E8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanghe.miledeck.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MileDeck.app/MileDeck";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B67BB7BEADDE62B4C046E4C2 /* Build configuration list for PBXProject MileDeck */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F6C536317593A739CBC55CE0 /* Debug */,
+				1175532C20D633A8D148806F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FBB18CE9D0B988EC69D99B7D /* Build configuration list for PBXNativeTarget MileDeck */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55C5B61C4157133D2FD5C0AD /* Debug */,
+				903C068DCB91A63E44F6E6B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF0D31FF3B7C340DEADEC713 /* Build configuration list for PBXNativeTarget MileDeckTests */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1142B2D26B8DF17217F19407 /* Debug */,
+				F488FCA490B832B86D14D6E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CAD8338BC75F598B1ADCBE3F /* Project object */;
+}

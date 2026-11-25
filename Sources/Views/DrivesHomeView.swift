@@ -1,0 +1,536 @@
+import SwiftUI
+
+struct DrivesHomeView: View {
+    @EnvironmentObject private var ledger: MileageStore
+    @EnvironmentObject private var tracker: DriveTrackingService
+    @EnvironmentObject private var store: StoreManager
+
+    @Binding var showSwipeDeck: Bool
+    @Binding var editingDrive: DriveEditTarget?
+    @Binding var showPaywall: Bool
+
+    enum LogFilter: String, CaseIterable, Identifiable {
+        case all, business, personal, unsorted
+        var id: String { rawValue }
+        var title: String {
+            switch self {
+            case .all: return L10n.t("All", "全部")
+            case .business: return L10n.t("Business", "商务")
+            case .personal: return L10n.t("Personal", "私人")
+            case .unsorted: return L10n.t("Unsorted", "待分类")
+            }
+        }
+    }
+
+    @State private var selectedFilter: LogFilter = .all
+
+    private var filteredDrives: [DriveRecord] {
+        switch selectedFilter {
+        case .all: return ledger.drives
+        case .business: return ledger.drives.filter { $0.classification == .business || $0.classification == .medical || $0.classification == .charity }
+        case .personal: return ledger.drives.filter { $0.classification == .personal }
+        case .unsorted: return ledger.unclassifiedDrives
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 16) {
+                    heroYTDCard
+                    liveTrackerCard
+
+                    if !ledger.unclassifiedDrives.isEmpty {
+                        unclassifiedDeckPreviewCard
+                    }
+
+                    tripLogSection
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+                .padding(.bottom, 24)
+            }
+            .background(MileTheme.roadWhite.ignoresSafeArea())
+            .navigationTitle("MileDeck")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showPaywall = true
+                    } label: {
+                        HStack(spacing: 5) {
+                            Image(systemName: store.isPro ? "checkmark.seal.fill" : "sparkles")
+                                .font(.caption.weight(.bold))
+                            Text(store.isPro ? L10n.t("Pro Lifetime", "永久版已解锁") : L10n.t("Lifetime $14.99", "买断 ¥48"))
+                                .font(.caption.weight(.heavy).monospacedDigit())
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(store.isPro ? MileTheme.emeraldSoft : MileTheme.asphalt)
+                        .foregroundStyle(store.isPro ? MileTheme.emerald : Color(red: 0.43, green: 0.94, blue: 0.74))
+                        .clipShape(Capsule())
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        editingDrive = DriveEditTarget(drive: nil)
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title3)
+                            .foregroundStyle(MileTheme.emerald)
+                    }
+                    .accessibilityLabel(L10n.t("Log Manual Drive", "手动记里程"))
+                }
+            }
+        }
+    }
+
+    // MARK: - Hero YTD Asphalt Card
+    private var heroYTDCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                HStack(spacing: 6) {
+                    Image(systemName: "road.lanes")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(MileTheme.emeraldBright)
+                    Text(L10n.t("2026 IRS TAX DEDUCTION", "2026 年度累计抵税"))
+                        .font(.caption.weight(.heavy))
+                        .tracking(0.6)
+                        .foregroundStyle(Color.white.opacity(0.75))
+                }
+                Spacer()
+                Text(L10n.t("H1 72.5¢ • H2 76¢", "上半年72.5¢ • 下半年76¢"))
+                    .font(.system(size: 10, weight: .bold).monospacedDigit())
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 4)
+                    .background(MileTheme.emerald.opacity(0.26))
+                    .foregroundStyle(Color(red: 0.43, green: 0.94, blue: 0.74))
+                    .clipShape(Capsule())
+            }
+
+            HStack(alignment: .firstTextBaseline) {
+                Text(IRSRateEngine.formatMoney(ledger.ytdTaxDeduction, symbol: ledger.settings.currencySymbol))
+                    .font(.system(size: 40, weight: .heavy).monospacedDigit())
+                    .foregroundStyle(.white)
+                Spacer()
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(IRSRateEngine.formatDistance(ledger.ytdDeductibleMiles, unit: ledger.settings.distanceUnit))
+                        .font(.headline.weight(.heavy).monospacedDigit())
+                        .foregroundStyle(Color(red: 0.43, green: 0.94, blue: 0.74))
+                    Text(L10n.t("\(ledger.deductibleDrives.count) deductible trips", "\(ledger.deductibleDrives.count) 趟已分类抵税"))
+                        .font(.caption2.weight(.medium))
+                        .foregroundStyle(Color.white.opacity(0.68))
+                }
+            }
+
+            // 2026 H1 vs H2 Split Telemetry Bar
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(L10n.t("Jan–Jun ($0.725/mi)", "1–6月 ($0.725/mi)"))
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(Color.white.opacity(0.60))
+                    HStack(spacing: 6) {
+                        Text(IRSRateEngine.formatMoney(ledger.h1BusinessDeduction, symbol: ledger.settings.currencySymbol))
+                            .font(.subheadline.weight(.bold).monospacedDigit())
+                            .foregroundStyle(.white)
+                        Text(IRSRateEngine.formatDistance(ledger.h1BusinessMiles, unit: ledger.settings.distanceUnit))
+                            .font(.caption2.monospacedDigit())
+                            .foregroundStyle(Color.white.opacity(0.65))
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(10)
+                .background(Color.white.opacity(0.07))
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(L10n.t("Jul–Dec ($0.760/mi)", "7–12月 ($0.760/mi)"))
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(Color(red: 0.98, green: 0.78, blue: 0.42))
+                    HStack(spacing: 6) {
+                        Text(IRSRateEngine.formatMoney(ledger.h2BusinessDeduction, symbol: ledger.settings.currencySymbol))
+                            .font(.subheadline.weight(.bold).monospacedDigit())
+                            .foregroundStyle(.white)
+                        Text(IRSRateEngine.formatDistance(ledger.h2BusinessMiles, unit: ledger.settings.distanceUnit))
+                            .font(.caption2.monospacedDigit())
+                            .foregroundStyle(Color.white.opacity(0.65))
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(10)
+                .background(MileTheme.emerald.opacity(0.18))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .stroke(MileTheme.emerald.opacity(0.45), lineWidth: 1)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            }
+        }
+        .padding(18)
+        .background(MileTheme.asphalt)
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .shadow(color: MileTheme.asphalt.opacity(0.16), radius: 12, y: 6)
+    }
+
+    // MARK: - Live GPS Drive Tracker Card
+    private var liveTrackerCard: some View {
+        VStack(spacing: 12) {
+            if tracker.isRecording {
+                let estVal = IRSRateEngine.roundCents(tracker.liveDistanceMiles * IRSRateEngine.irsRatePerMile(for: .business, on: Date()))
+                HStack(spacing: 12) {
+                    Circle()
+                        .fill(MileTheme.amber)
+                        .frame(width: 11, height: 11)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(L10n.t("LIVE DRIVE RECORDING", "实时行车记录中"))
+                            .font(.caption.weight(.heavy))
+                            .foregroundStyle(MileTheme.amber)
+                        Text("\(tracker.formattedElapsed())  •  \(IRSRateEngine.formatDistance(tracker.liveDistanceMiles, unit: ledger.settings.distanceUnit))  •  +\(IRSRateEngine.formatMoney(estVal, symbol: ledger.settings.currencySymbol))")
+                            .font(.subheadline.weight(.bold).monospacedDigit())
+                            .foregroundStyle(MileTheme.ink)
+                    }
+                    Spacer()
+                }
+
+                HStack(spacing: 10) {
+                    Button {
+                        tracker.addSimulatedDistance(miles: 2.4)
+                    } label: {
+                        Label(L10n.t("+2.4 mi Test", "+2.4 英里实测"), systemImage: "location.north.line.fill")
+                            .font(.caption.weight(.bold))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 10)
+                            .background(MileTheme.roadWhite)
+                            .foregroundStyle(MileTheme.ink)
+                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    }
+
+                    Button {
+                        if let logged = tracker.stopAndCreateDrive(vehicleId: ledger.defaultVehicle?.id) {
+                            ledger.addDrive(logged)
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "stop.circle.fill")
+                            Text(L10n.t("Stop & Log Drive", "结束并保存行程"))
+                                .font(.subheadline.weight(.bold))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(MileTheme.dangerRed)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                    }
+                }
+            } else {
+                HStack(spacing: 12) {
+                    Button {
+                        tracker.startLiveDrive()
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "location.circle.fill")
+                                .font(.title3)
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text(L10n.t("Start Live Drive", "开始实时记里程"))
+                                    .font(.subheadline.weight(.bold))
+                                Text(
+                                    ledger.settings.autoDriveEnabled
+                                        ? L10n.t("Auto-Detect ON • Offline GPS", "自动识车已开启 • 离线 GPS")
+                                        : L10n.t("Manual 1-Tap GPS Tracker", "一键 GPS 离线记录")
+                                )
+                                .font(.caption2)
+                                .foregroundStyle(Color.white.opacity(0.85))
+                            }
+                            Spacer()
+                            Image(systemName: "play.fill")
+                                .font(.subheadline.weight(.bold))
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 12)
+                        .background(MileTheme.emerald)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
+
+                    Button {
+                        editingDrive = DriveEditTarget(drive: nil)
+                    } label: {
+                        VStack(spacing: 3) {
+                            Image(systemName: "square.and.pencil")
+                                .font(.headline)
+                            Text(L10n.t("Manual", "手录"))
+                                .font(.caption2.weight(.bold))
+                        }
+                        .frame(width: 68, height: 56)
+                        .background(MileTheme.card)
+                        .foregroundStyle(MileTheme.ink)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(MileTheme.border, lineWidth: 1)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .mileCard(padding: 12)
+    }
+
+    // MARK: - Unclassified Swipe Deck Spotlight Card
+    private var unclassifiedDeckPreviewCard: some View {
+        let count = ledger.unclassifiedDrives.count
+        let top = ledger.unclassifiedDrives[0]
+        let pot = IRSRateEngine.deduction(for: top, settings: ledger.settings, includePotentialForUnclassified: true)
+
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                HStack(spacing: 6) {
+                    Image(systemName: "rectangle.stack.badge.play.fill")
+                        .foregroundStyle(MileTheme.amber)
+                    Text(L10n.t("\(count) Drives Ready to Swipe", "\(count) 趟行程待左滑/右滑分类"))
+                        .font(.subheadline.weight(.heavy))
+                        .foregroundStyle(MileTheme.ink)
+                }
+                Spacer()
+                Button {
+                    showSwipeDeck = true
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(L10n.t("Open Deck", "打开滑卡"))
+                            .font(.caption.weight(.bold))
+                        Image(systemName: "chevron.right")
+                            .font(.caption2.weight(.bold))
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(MileTheme.amberSoft)
+                    .foregroundStyle(MileTheme.amber)
+                    .clipShape(Capsule())
+                }
+            }
+
+            // Compact top card preview
+            Button {
+                showSwipeDeck = true
+            } label: {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(top.startAddress)
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(MileTheme.ink)
+                            .lineLimit(1)
+                        Image(systemName: "arrow.right")
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(MileTheme.muted)
+                        Text(top.endAddress)
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(MileTheme.ink)
+                            .lineLimit(1)
+                    }
+                    HStack {
+                        Label(top.purpose.title, systemImage: top.purpose.icon)
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(MileTheme.muted)
+                        Spacer()
+                        Text(IRSRateEngine.formatDistance(top.distanceMiles, unit: ledger.settings.distanceUnit))
+                            .font(.caption.weight(.bold).monospacedDigit())
+                            .foregroundStyle(MileTheme.ink)
+                        Text("+" + IRSRateEngine.formatMoney(pot, symbol: ledger.settings.currencySymbol))
+                            .font(.caption.weight(.heavy).monospacedDigit())
+                            .foregroundStyle(MileTheme.emerald)
+                    }
+                }
+                .padding(12)
+                .background(MileTheme.roadWhite)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
+            .buttonStyle(.plain)
+
+            // Quick inline classify buttons
+            HStack(spacing: 10) {
+                Button {
+                    quickClassify(top, as: .personal)
+                } label: {
+                    Label(L10n.t("Personal", "私人"), systemImage: "house.fill")
+                        .font(.caption.weight(.bold))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 9)
+                        .background(MileTheme.personalSoft)
+                        .foregroundStyle(MileTheme.personalSlate)
+                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                }
+
+                Button {
+                    quickClassify(top, as: .business)
+                } label: {
+                    Label(L10n.t("Business +\(IRSRateEngine.formatMoney(pot, symbol: ledger.settings.currencySymbol))", "商务 +\(IRSRateEngine.formatMoney(pot, symbol: ledger.settings.currencySymbol))"), systemImage: "briefcase.fill")
+                        .font(.caption.weight(.bold).monospacedDigit())
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 9)
+                        .background(MileTheme.emerald)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                }
+            }
+        }
+        .mileCard(padding: 14)
+    }
+
+    // MARK: - Filterable Trip Log
+    private var tripLogSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(L10n.t("Trip Log", "行车日志"))
+                    .font(.headline.weight(.heavy))
+                    .foregroundStyle(MileTheme.ink)
+                Spacer()
+                if !store.isPro {
+                    Text(L10n.t("\(store.remainingFreeDrivesThisMonth)/20 free/mo", "本月剩余 \(store.remainingFreeDrivesThisMonth)/20 免费"))
+                        .font(.caption2.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(MileTheme.muted)
+                }
+            }
+
+            // Filter Pills
+            HStack(spacing: 8) {
+                ForEach(LogFilter.allCases) { f in
+                    let active = selectedFilter == f
+                    Button {
+                        selectedFilter = f
+                    } label: {
+                        Text(f.title)
+                            .font(.caption.weight(.bold))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 7)
+                            .background(active ? MileTheme.asphalt : MileTheme.card)
+                            .foregroundStyle(active ? .white : MileTheme.muted)
+                            .overlay(
+                                Capsule().stroke(active ? MileTheme.asphalt : MileTheme.border, lineWidth: 1)
+                            )
+                            .clipShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                }
+                Spacer()
+            }
+
+            if filteredDrives.isEmpty {
+                VStack(spacing: 8) {
+                    Image(systemName: "car.2.fill")
+                        .font(.title2)
+                        .foregroundStyle(MileTheme.muted)
+                    Text(L10n.t("No drives in this filter yet.", "该分类下暂无行程记录。"))
+                        .font(.subheadline)
+                        .foregroundStyle(MileTheme.muted)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 28)
+                .mileCard()
+            } else {
+                VStack(spacing: 10) {
+                    ForEach(filteredDrives) { drive in
+                        driveRow(drive)
+                    }
+                }
+            }
+        }
+    }
+
+    private func driveRow(_ drive: DriveRecord) -> some View {
+        let ded = IRSRateEngine.deduction(
+            for: drive,
+            settings: ledger.settings,
+            includePotentialForUnclassified: drive.classification == .unclassified
+        )
+        let rateStr = IRSRateEngine.effectiveRateLabel(for: drive, settings: ledger.settings)
+
+        return Button {
+            editingDrive = DriveEditTarget(drive: drive)
+        } label: {
+            HStack(spacing: 12) {
+                // Classification Icon Badge
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(drive.classification.softBackground)
+                        .frame(width: 44, height: 44)
+                    Image(systemName: drive.classification.icon)
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(drive.classification.color)
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 6) {
+                        Text(drive.classification.shortTag)
+                            .font(.system(size: 9, weight: .heavy))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(drive.classification.softBackground)
+                            .foregroundStyle(drive.classification.color)
+                            .clipShape(Capsule())
+
+                        Text(Self.rowDateFormatter.string(from: drive.startDate))
+                            .font(.caption2.weight(.semibold).monospacedDigit())
+                            .foregroundStyle(MileTheme.muted)
+                    }
+
+                    Text("\(drive.startAddress) → \(drive.endAddress)")
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(MileTheme.ink)
+                        .lineLimit(1)
+
+                    HStack(spacing: 8) {
+                        Label(drive.purpose.title, systemImage: drive.purpose.icon)
+                            .font(.caption2)
+                            .foregroundStyle(MileTheme.muted)
+                        Text("•")
+                            .font(.caption2)
+                            .foregroundStyle(MileTheme.border)
+                        Text(rateStr)
+                            .font(.caption2.weight(.semibold).monospacedDigit())
+                            .foregroundStyle(MileTheme.muted)
+                    }
+                }
+
+                Spacer(minLength: 4)
+
+                VStack(alignment: .trailing, spacing: 3) {
+                    Text(
+                        drive.classification == .personal
+                            ? "$0.00"
+                            : (drive.classification == .unclassified ? "~\(IRSRateEngine.formatMoney(ded, symbol: ledger.settings.currencySymbol))" : IRSRateEngine.formatMoney(ded, symbol: ledger.settings.currencySymbol))
+                    )
+                    .font(.subheadline.weight(.heavy).monospacedDigit())
+                    .foregroundStyle(
+                        drive.classification == .personal ? MileTheme.muted :
+                            (drive.classification == .unclassified ? MileTheme.amber : MileTheme.emerald)
+                    )
+
+                    Text(IRSRateEngine.formatDistance(drive.distanceMiles, unit: ledger.settings.distanceUnit))
+                        .font(.caption.weight(.semibold).monospacedDigit())
+                        .foregroundStyle(MileTheme.muted)
+                }
+            }
+            .mileCard(padding: 13)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func quickClassify(_ drive: DriveRecord, as classification: DriveClassification) {
+        if !store.canClassifyOrExportFree {
+            showPaywall = true
+            return
+        }
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+            ledger.classifyDrive(drive.id, as: classification)
+            store.recordClassifiedOrExportedDrive()
+        }
+    }
+
+    private static let rowDateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateFormat = "MMM d, yyyy"
+        return df
+    }()
+}

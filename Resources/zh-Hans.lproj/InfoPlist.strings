@@ -1,0 +1,4 @@
+"CFBundleDisplayName" = "MileDeck里程";
+"NSLocationWhenInUseUsageDescription" = "MileDeck 仅在您记录行程时使用定位计算真实行驶里程与抵税金额，所有路线仅保存在本机。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "仅在您开启「自动识车记录」时使用后台定位，实现无感记里程，数据绝不上传云端。";
+"NSMotionUsageDescription" = "MileDeck 使用驾驶运动传感识别开车起止状态，大幅降低后台耗电。";

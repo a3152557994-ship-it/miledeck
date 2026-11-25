@@ -1,0 +1,28 @@
+{
+  "bundleId": "com.yanghe.miledeck",
+  "primaryCategory": "FINANCE",
+  "secondaryCategory": "BUSINESS",
+  "copyright": "© 2026 Yang He",
+  "urls": {
+    "privacy": "https://a3152557994-ship-it.github.io/miledeck/privacy.html",
+    "terms": "https://a3152557994-ship-it.github.io/miledeck/terms.html",
+    "support": "https://a3152557994-ship-it.github.io/miledeck/support.html",
+    "marketing": "https://a3152557994-ship-it.github.io/miledeck/"
+  },
+  "localizations": {
+    "en-US": {
+      "name": "MileDeck: Auto Mileage Log",
+      "subtitle": "IRS Tax Tracker & Drive Swipe",
+      "promotionalText": "100% offline automatic mileage tracker with official 2026 IRS split rates (72.5¢ Jan–Jun & 76¢ Jul–Dec). Swipe right for Business, left for Personal, export Schedule C PDF/CSV, and unlock Lifetime for $14.99 once.",
+      "keywords": "mileage tracker,irs tax,mileage log,drive tracker,expense,deduction,delivery,rideshare,auto,offline",
+      "description": "MileDeck is a fast, 100% offline automatic mileage and 2026 IRS tax deduction tracker built for delivery drivers, rideshare contractors, realtors, technicians, and self-employed professionals who want IRS-compliant logbooks without paying $90–$140/year in recurring subscriptions.\n\nBUILT FOR 2026 TAX SAVINGS:\n• Verified 2026 IRS Split-Period Engine: Automatically applies the official IRS standard business mileage rates by trip date—$0.725/mile from January 1 to June 30, 2026, and $0.76/mile from July 1 to December 31, 2026—plus Medical/Moving ($0.21/mi), Charity ($0.14/mi), custom per-mile or per-km rates, and Miles/KM toggle.\n• Signature Drive Swipe Deck: Unsorted trips appear as crisp route cards showing Start → Destination, distance, and exact IRS tax value. Swipe right for Business deduction, swipe left for Personal, tag the purpose (Delivery / Gig, Client Site, Supply Run, Property Showing, Errand), and undo anytime.\n• Automatic & 1-Tap Live GPS Tracking: Native CoreLocation + CoreMotion automotive detection logs trips hands-free, or tap Start Live Drive for a real-time distance and tax deduction counter. Manual trip entry is always one tap away.\n• Audit-Ready IRS Schedule C PDF & CSV Reports: Preview crisp multi-page PDFKit tax logbooks right inside the app—complete with H1/H2 split-period totals, vehicle odometer logs, and route details—then share PDF or spreadsheet-ready CSV to your CPA in one tap.\n• Multi-Vehicle Garage & Odometer Logs: Track multiple cars or trucks with start-of-year and current odometer readings required by IRS Publication 463.\n• 100% Offline, Zero Account Required: Your GPS routes, home address, and tax figures never leave your iPhone or iPad. Export or restore a complete local JSON backup anytime.\n\nHONEST PRICING (NO $90–$140/YR RENT):\nStart free with unlimited automatic and manual drive tracking, live PDF previews, multi-vehicle garage, and 20 free classified/exported drives every month.\nUpgrade anytime with:\n• MileDeck Pro Lifetime ($14.99 one-time): Pay once, own forever—unlimited monthly drive classifications, unlimited IRS Schedule C PDF logbooks, and CSV exports.\n• MileDeck Pro Annual ($9.99/year with 3-day free trial) or Monthly ($1.99/month): Optional auto-renewable plans you can cancel anytime in iOS Settings > Apple Account > Subscriptions.\n\nPrivacy Policy: https://a3152557994-ship-it.github.io/miledeck/privacy.html\nTerms of Use (EULA): https://a3152557994-ship-it.github.io/miledeck/terms.html"
+    },
+    "zh-Hans": {
+      "name": "MileDeck 自动里程与报税记录",
+      "subtitle": "自动识车记里程·左滑私人右滑商务抵税",
+      "promotionalText": "免登录 100% 本地离线自动记里程工具：内置 2026 IRS 上下半年分段费率自动计算（72.5¢ / 76¢）、左滑私人右滑商务极速分类、一键导出审计级报税 PDF 与 CSV，支持 ¥48 一次买断用终身。",
+      "keywords": "里程记录,报税抵扣,行车日志,网约车记账,外勤里程,商务用车,油费报销,买断,离线,自动记录",
+      "description": "MileDeck 是一款专为北美华人网约车/外卖配送司机、房产经纪、装修外勤及个体自雇人士打造的 100% 本地离线自动里程与 2026 IRS 报税抵扣记录工具。免注册账号、无云端行踪追踪，帮您告别每年数百元的高价里程订阅软件。\n\n核心实用功能：\n• 2026 IRS 分段标准费率引擎：根据行程日期自动套用官方 2026 年商务标准费率——上半年（1–6月）$0.725/英里、下半年（7–12月）$0.76/英里；同时支持医疗/搬迁（$0.21/英里）、公益慈善（$0.14/英里）、自定义单价及英里/公里单位切换。\n• 滑卡极速分类（Drive Swipe Deck）：未分类行程自动汇总成直观卡片，清晰显示起终点、里程数与实时抵税金额。右滑归入商务抵税、左滑归入私人行程，并支持快捷用途标签与一键撤回。\n• 自动识车 + 一键实时 GPS 记录：原生结合 CoreLocation 与驾驶运动传感实现无感自动记车，也可一键开启实时行车仪表盘，随时补录手动行程。\n• 审计级 IRS Schedule C 报税 PDF 与 CSV：内置实时月度抵税柱状图与矢量 PDFKit 报税总账预览，完整包含上下半年分段统计、车辆年初/当前表显里程与行程明细，一键分享给会计师（CPA）。\n• 多车辆表显车库与本地备份：支持管理多辆工作/家用车辆表显里程，支持全量 JSON 本地备份与一键恢复，路线隐私永不上传云端。\n\n透明定价：\n免费下载，无限自动/手动记录行车里程，每月赠送 20 趟免费分类/导出额度。\n如需无限分类与导出，可选：\n• 永久买断版（¥48 一次付清，终身拥有无续费）\n• 年度会员（¥28/年，含 3 天免费试用，扣费前 24 小时主动提醒）或月度会员（¥8/月），可随时在 iPhone「设置 > Apple 账户 > 订阅」取消。\n\n隐私政策：https://a3152557994-ship-it.github.io/miledeck/privacy.html\n使用条款：https://a3152557994-ship-it.github.io/miledeck/terms.html"
+    }
+  }
+}

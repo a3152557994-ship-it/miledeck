@@ -1,0 +1,4 @@
+"CFBundleDisplayName" = "MileDeck";
+"NSLocationWhenInUseUsageDescription" = "MileDeck uses your location while tracking a drive to calculate accurate route distance and IRS mileage tax deductions. All location data stays strictly on your device.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "MileDeck uses background location only when Automatic Drive Detection is enabled so drives are logged hands-free. Route data never leaves your device.";
+"NSMotionUsageDescription" = "MileDeck uses automotive motion activity to detect when you start and stop driving with minimal battery usage.";
