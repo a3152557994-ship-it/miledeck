@@ -217,6 +217,23 @@ final class MileageStore: ObservableObject {
         }
     }
 
+    func updateDriveAddresses(id: UUID, startAddress: String? = nil, endAddress: String? = nil) {
+        guard let idx = drives.firstIndex(where: { $0.id == id }) else { return }
+        var updated = drives[idx]
+        var changed = false
+        if let startAddress, !startAddress.isEmpty, updated.startAddress != startAddress {
+            updated.startAddress = startAddress
+            changed = true
+        }
+        if let endAddress, !endAddress.isEmpty, updated.endAddress != endAddress {
+            updated.endAddress = endAddress
+            changed = true
+        }
+        if changed {
+            drives[idx] = updated
+        }
+    }
+
     func deleteDrive(_ id: UUID) {
         drives.removeAll { $0.id == id }
     }

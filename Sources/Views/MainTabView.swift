@@ -165,11 +165,15 @@ struct MainTabView: View {
             ))
         }
         .onAppear {
+            tracker.bindLedger(ledger)
             tracker.configureAutoDetection(
                 enabled: ledger.settings.autoDriveEnabled,
                 sensitivity: ledger.settings.autoDriveSensitivity
             ) { completed in
                 ledger.addDrive(completed)
+            }
+            Task {
+                await tracker.backfillUnresolvedAddresses(in: ledger)
             }
             applyDemoScreenIfNeeded()
             if !hasCompletedOnboarding && !hasDemoScreenArg {

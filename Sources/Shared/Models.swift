@@ -380,6 +380,10 @@ struct DriveRecord: Identifiable, Codable, Equatable {
     var odometerEndMiles: Double?
     var isAutoDetected: Bool
     var notes: String
+    var startLatitude: Double? = nil
+    var startLongitude: Double? = nil
+    var endLatitude: Double? = nil
+    var endLongitude: Double? = nil
 }
 
 struct DriverSettings: Codable, Equatable {

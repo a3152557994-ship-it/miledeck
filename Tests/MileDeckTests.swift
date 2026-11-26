@@ -1,6 +1,21 @@
+import CoreLocation
+import CoreMotion
 import PDFKit
 import XCTest
 @testable import MileDeck
+
+private struct MockReverseGeocoder: ReverseGeocodingHandling {
+    var shouldFailOffline: Bool = false
+    var mapping: [String: String] = [:]
+
+    func reverseGeocode(_ location: CLLocation) async throws -> String? {
+        if shouldFailOffline {
+            throw URLError(.notConnectedToInternet)
+        }
+        let key = DriveTrackingService.formatCoordinateFallback(location.coordinate)
+        return mapping[key] ?? "120 Market St, San Francisco"
+    }
+}
 
 @MainActor
 final class MileDeckTests: XCTestCase {
@@ -410,5 +425,243 @@ final class MileDeckTests: XCTestCase {
         let decodedLegacy = try JSONDecoder.mileDeck.decode(DriverSettings.self, from: legacyJSON)
         XCTAssertEqual(decodedLegacy.driverName, "Legacy Driver")
         XCTAssertEqual(decodedLegacy.taxRegion, .usIRS2026)
+    }
+
+    // MARK: - 8. Auto-Stop Stationary Detection, Anti-Fake-Mileage & Geocoding Compliance
+    func testAutoDriveStationaryThresholdStopsGPSAndSavesCompletedDrive() async {
+        let store = MileageStore(storageURL: tempStoreURL("autostop"), seedIfEmpty: false)
+        let mockGeo = MockReverseGeocoder(
+            shouldFailOffline: false,
+            mapping: [
+                "37.7749, -122.4194": "120 Market St, San Francisco",
+                "37.7897, -122.4014": "450 Sutter St, San Francisco",
+            ]
+        )
+        let tracker = DriveTrackingService(geocoder: mockGeo, enableNetworkMonitor: false)
+        tracker.bindLedger(store)
+        tracker.autoStopStationaryThresholdSeconds = 180.0
+        tracker.autoTriggerRequiredConsecutiveFixes = 2
+        tracker.autoRestartCooldownSeconds = 60.0
+
+        var autoCompletedDrives: [DriveRecord] = []
+        tracker.configureAutoDetection(enabled: true, sensitivity: .balanced) { completed in
+            autoCompletedDrives.append(completed)
+            store.addDrive(completed)
+        }
+
+        let t0 = Date(timeIntervalSince1970: 1_795_000_000)
+
+        // Two consecutive driving GPS fixes (~25 mph = 11.2 m/s) trigger automatic recording
+        let loc1 = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
+            altitude: 10,
+            horizontalAccuracy: 8,
+            verticalAccuracy: 8,
+            course: 45,
+            speed: 11.2,
+            timestamp: t0
+        )
+        let loc2 = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 37.7765, longitude: -122.4175),
+            altitude: 10,
+            horizontalAccuracy: 8,
+            verticalAccuracy: 8,
+            course: 45,
+            speed: 12.5,
+            timestamp: t0.addingTimeInterval(15)
+        )
+        tracker.processLocationUpdate(loc1)
+        XCTAssertFalse(tracker.isRecording, "Single GPS spike must not prematurely start auto-recording")
+        tracker.processLocationUpdate(loc2)
+        XCTAssertTrue(tracker.isRecording, "Two qualifying automotive fixes must start auto-recording")
+        XCTAssertTrue(tracker.isCurrentDriveAutoDetected)
+
+        // Drive ~1.4 miles to destination
+        let loc3 = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 37.7897, longitude: -122.4014),
+            altitude: 12,
+            horizontalAccuracy: 8,
+            verticalAccuracy: 8,
+            course: 45,
+            speed: 13.0,
+            timestamp: t0.addingTimeInterval(140)
+        )
+        tracker.processLocationUpdate(loc3)
+        XCTAssertGreaterThan(tracker.liveDistanceMiles, 1.0)
+
+        // Allow async start geocoding task to settle
+        try? await Task.sleep(nanoseconds: 50_000_000)
+
+        // Vehicle parks (speed = 0.0 m/s < 0.8 m/s) for 120s -> still recording (< 180s threshold)
+        let parked120 = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 37.7897, longitude: -122.4014),
+            altitude: 12,
+            horizontalAccuracy: 8,
+            verticalAccuracy: 8,
+            course: 0,
+            speed: 0.2,
+            timestamp: t0.addingTimeInterval(260)
+        )
+        tracker.processLocationUpdate(parked120)
+        XCTAssertTrue(tracker.isRecording)
+        XCTAssertEqual(autoCompletedDrives.count, 0)
+
+        // Driver exits car / stationary reaches 185s (>= 180s threshold) -> auto-stops & saves!
+        tracker.processMotionState(
+            automotive: false,
+            stationary: true,
+            walkingOrRunning: true,
+            confidence: .high,
+            now: t0.addingTimeInterval(325)
+        )
+        XCTAssertFalse(tracker.isRecording, "Tracker must automatically stop recording after stationary threshold")
+        XCTAssertEqual(autoCompletedDrives.count, 1, "Auto-completed drive must be emitted once")
+        XCTAssertEqual(store.drives.count, 1, "Completed auto-drive must be persisted to MileageStore")
+
+        // Allow async end geocoding callback to update ledger
+        try? await Task.sleep(nanoseconds: 60_000_000)
+
+        let saved = store.drives[0]
+        XCTAssertTrue(saved.isAutoDetected)
+        XCTAssertGreaterThan(saved.distanceMiles, 1.0)
+        XCTAssertEqual(saved.startAddress, "120 Market St, San Francisco")
+        XCTAssertEqual(saved.endAddress, "450 Sutter St, San Francisco")
+        XCTAssertFalse(saved.startAddress.contains("Auto-Detected Departure"))
+        XCTAssertFalse(saved.endAddress.contains("Destination (Logged Live)"))
+
+        // Cooldown guard: noisy indoor motion bounce 10s later must NOT restart an infinite loop
+        tracker.processMotionState(
+            automotive: true,
+            stationary: false,
+            walkingOrRunning: false,
+            confidence: .medium,
+            now: t0.addingTimeInterval(335)
+        )
+        XCTAssertFalse(tracker.isRecording, "Cooldown must prevent immediate indoor false-trigger loop")
+    }
+
+    func testShortDistanceUnder015MilesDiscardedWithoutFabricatingFake12Miles() {
+        let store = MileageStore(storageURL: tempStoreURL("shortdiscard"), seedIfEmpty: false)
+        let tracker = DriveTrackingService(geocoder: MockReverseGeocoder(shouldFailOffline: true), enableNetworkMonitor: false)
+        tracker.bindLedger(store)
+        tracker.autoStopStationaryThresholdSeconds = 30.0
+
+        // 1. Manual start & immediate stop (0.0 mi) -> must return nil, NEVER fabricate 1.2 mi!
+        tracker.startLiveDrive()
+        XCTAssertTrue(tracker.isRecording)
+        let zeroResult = tracker.stopAndCreateDrive(vehicleId: nil)
+        XCTAssertNil(zeroResult, "0.0 mi accidental tap must return nil instead of fabricating 1.2 mi")
+        XCTAssertNotNil(tracker.statusBanner, "UI must inform user that short trip was discarded")
+        XCTAssertTrue(store.drives.isEmpty)
+
+        // 2. Auto-detected micro movement (0.09 mi < 0.15 mi) -> auto-stop discards cleanly without saving
+        var completedCount = 0
+        tracker.configureAutoDetection(enabled: true, sensitivity: .high) { _ in
+            completedCount += 1
+        }
+        let t0 = Date(timeIntervalSince1970: 1_795_100_000)
+        let p1 = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 30.2672, longitude: -97.7431),
+            altitude: 150,
+            horizontalAccuracy: 6,
+            verticalAccuracy: 6,
+            course: 90,
+            speed: 5.0,
+            timestamp: t0
+        )
+        // ~120 meters (~0.075 mi < 0.15 mi)
+        let p2 = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 30.2672, longitude: -97.7418),
+            altitude: 150,
+            horizontalAccuracy: 6,
+            verticalAccuracy: 6,
+            course: 90,
+            speed: 5.0,
+            timestamp: t0.addingTimeInterval(20)
+        )
+        tracker.startLiveDrive(autoDetected: true, initialLocation: p1, startDate: t0)
+        tracker.processLocationUpdate(p2)
+        XCTAssertLessThan(tracker.liveDistanceMiles, 0.15)
+
+        // Stationary for 35s -> triggers auto-stop, discards micro-trip
+        let p3 = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 30.2672, longitude: -97.7418),
+            altitude: 150,
+            horizontalAccuracy: 6,
+            verticalAccuracy: 6,
+            course: 0,
+            speed: 0.0,
+            timestamp: t0.addingTimeInterval(60)
+        )
+        tracker.processLocationUpdate(p3)
+        XCTAssertFalse(tracker.isRecording)
+        XCTAssertEqual(completedCount, 0, "Micro-trip under 0.15 mi must be discarded and never logged")
+    }
+
+    func testReverseGeocodingOfflineCoordinateFallbackAndOnlineBackfill() async {
+        let store = MileageStore(storageURL: tempStoreURL("geobackfill"), seedIfEmpty: false)
+        let offlineGeo = MockReverseGeocoder(shouldFailOffline: true)
+        let tracker = DriveTrackingService(geocoder: offlineGeo, enableNetworkMonitor: false)
+        tracker.bindLedger(store)
+
+        let t0 = Date(timeIntervalSince1970: 1_795_200_000)
+        let startLoc = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
+            altitude: 10,
+            horizontalAccuracy: 5,
+            verticalAccuracy: 5,
+            course: 0,
+            speed: 10.0,
+            timestamp: t0
+        )
+        let endLoc = CLLocation(
+            coordinate: CLLocationCoordinate2D(latitude: 37.7897, longitude: -122.4014),
+            altitude: 10,
+            horizontalAccuracy: 5,
+            verticalAccuracy: 5,
+            course: 90,
+            speed: 12.0,
+            timestamp: t0.addingTimeInterval(300)
+        )
+
+        tracker.startLiveDrive(autoDetected: false, initialLocation: startLoc, startDate: t0)
+        tracker.processLocationUpdate(endLoc)
+        guard let offlineDrive = tracker.stopAndCreateDrive(vehicleId: nil, endDate: t0.addingTimeInterval(305)) else {
+            XCTFail("Expected valid drive record (> 0.15 mi)")
+            return
+        }
+        store.addDrive(offlineDrive)
+
+        // Offline fallback must store exact 4-decimal coordinates, never fake placeholder text
+        XCTAssertEqual(store.drives[0].startAddress, "37.7749, -122.4194")
+        XCTAssertEqual(store.drives[0].endAddress, "37.7897, -122.4014")
+        XCTAssertTrue(DriveTrackingService.isCoordinatePlaceholder(store.drives[0].startAddress))
+
+        // Verify street formatting helper directly
+        let formatted = DriveTrackingService.formatAddressParts(
+            GeocodeAddressParts(
+                subThoroughfare: "120",
+                thoroughfare: "Market St",
+                subLocality: nil,
+                locality: "San Francisco",
+                administrativeArea: "CA",
+                name: nil
+            )
+        )
+        XCTAssertEqual(formatted, "120 Market St, San Francisco")
+
+        // Simulate network restored -> backfill upgrades coordinate placeholders to real street addresses
+        let onlineGeo = MockReverseGeocoder(
+            shouldFailOffline: false,
+            mapping: [
+                "37.7749, -122.4194": "120 Market St, San Francisco",
+                "37.7897, -122.4014": "450 Sutter St, San Francisco",
+            ]
+        )
+        tracker.setGeocoderForTesting(onlineGeo)
+        await tracker.backfillUnresolvedAddresses(in: store)
+
+        XCTAssertEqual(store.drives[0].startAddress, "120 Market St, San Francisco")
+        XCTAssertEqual(store.drives[0].endAddress, "450 Sutter St, San Francisco")
     }
 }

@@ -352,9 +352,28 @@ struct DrivesHomeView: View {
                     }
                     .buttonStyle(.plain)
                 }
+
+                if let banner = tracker.statusBanner, !banner.isEmpty {
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle.fill")
+                            .font(.caption)
+                            .foregroundStyle(MileTheme.amber)
+                        Text(banner)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(MileTheme.muted)
+                        Spacer(minLength: 0)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(MileTheme.amberSoft)
+                    .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+                }
             }
         }
         .mileCard(padding: 12)
+        .task {
+            await tracker.backfillUnresolvedAddresses(in: ledger)
+        }
     }
 
     // MARK: - Unclassified Swipe Deck Spotlight Card
